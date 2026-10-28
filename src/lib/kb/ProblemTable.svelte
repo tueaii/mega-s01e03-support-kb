@@ -43,7 +43,10 @@
   </tbody>
 </table>
 
-<p class="note">{misTagged} of {merged.length} reports carry an intake tag that does not match their problem.</p>
+{#each groups.filter((g) => g.problem === 'shift') as g (g.problem)}
+  <p class="note">{g.reports.length} <code>shift</code> reports are also counted under the cause their tenant files them under, as the desk counts them.</p>
+{/each}
+<p class="note">{misTagged} of {merged.length} reports carry an intake tag that does not match where they are filed.</p>
 
 <style>
   .sum { font-size: 1.1rem; }

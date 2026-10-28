@@ -32,7 +32,8 @@ coming in until their own fixes ship.
   date day first. People do what the hint says, so their date flips. The parser fix does not
   touch this form.
 - **shift** — some dates did not flip. They moved one day earlier, and people in different
-  places saw different days for the same meeting. That is a time zone bug.
+  places saw different days for the same meeting. That is a time zone bug. The desk files these
+  reports under `parser` by tenant, so they count in both rows.
 
 ## Why one ticket hid three
 

@@ -1,5 +1,6 @@
 // The problems inside a merged ticket. causes.ts says which bug a report's tenant and channel point
-// at; a report the desk read as a one-day move (desk-notes.json) is not a flip at all, so it gets its own.
+// at. A report the desk read as a one-day move (desk-notes.json) is not a flip at all: it is its own
+// problem, but the desk counts it where it is filed, by tenant, like readAs in causes.ts.
 import { causeOf, type Report, type Tenant } from '#lib/kb/causes';
 
 export type Problem = 'parser' | 'hint' | 'shift' | 'unplaced';
@@ -15,9 +16,10 @@ export const WHAT: Record<Problem, string> = {
   unplaced: 'no tenant on file',
 };
 
-export function problemOf(r: Report, t: Tenant | undefined, oneDayMove: readonly string[]): Problem {
-  if (oneDayMove.includes(r.id)) return 'shift';
-  return causeOf(r, t) ?? 'unplaced';
+// A report's problems: the cause it is filed under, and 'shift' as well when the desk read it as one.
+export function problemsOf(r: Report, t: Tenant | undefined, oneDayMove: readonly string[]): Problem[] {
+  const filed = causeOf(r, t) ?? 'unplaced';
+  return oneDayMove.includes(r.id) ? [filed, 'shift'] : [filed];
 }
 
 export type ProblemGroup = { problem: Problem; reports: Report[]; tenants: number; firstSeen: string; lastSeen: string; misTagged: number };
@@ -25,8 +27,7 @@ export type ProblemGroup = { problem: Problem; reports: Report[]; tenants: numbe
 export function groupByProblem(reports: Report[], tenantOf: (r: Report) => Tenant | undefined, oneDayMove: readonly string[]): ProblemGroup[] {
   const by = new Map<Problem, Report[]>();
   for (const r of reports) {
-    const p = problemOf(r, tenantOf(r), oneDayMove);
-    by.set(p, [...(by.get(p) ?? []), r]);
+    for (const p of problemsOf(r, tenantOf(r), oneDayMove)) by.set(p, [...(by.get(p) ?? []), r]);
   }
   return [...by.entries()]
     .map(([problem, rs]) => {
@@ -37,8 +38,8 @@ export function groupByProblem(reports: Report[], tenantOf: (r: Report) => Tenan
         tenants: new Set(rs.map((r) => r.tenant)).size,
         firstSeen: days[0],
         lastSeen: days[days.length - 1],
-        // Intake only knows parser and hint; a shift report tagged either is still mis-tagged.
-        misTagged: rs.filter((r) => r.meta.intakeTag !== problem).length,
+        // Intake only knows parser and hint, so it is checked against where a report is filed.
+        misTagged: problem === 'shift' ? 0 : rs.filter((r) => r.meta.intakeTag !== problem).length,
       };
     })
     .sort((a, b) => b.reports.length - a.reports.length);

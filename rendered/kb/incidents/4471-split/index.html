@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="../../../_app/immutable/entry/start.BEdyxXYZ.js" rel="modulepreload">
+    <link href="../../../_app/immutable/entry/start.0ZAixFZi.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/DnoyNMba.js" rel="modulepreload">
-		<link href="../../../_app/immutable/chunks/Dyp4-neT.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/BVOYatRn.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/DXhvxdpI.js" rel="modulepreload">
-		<link href="../../../_app/immutable/entry/app.D3bulSAR.js" rel="modulepreload">
+		<link href="../../../_app/immutable/entry/app.Dd8qGPd_.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/4HIIzLmj.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/B4WlwwdY.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/CGyox8To.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/gCpT5-Oq.js" rel="modulepreload">
 		<link href="../../../_app/immutable/nodes/0.Cg-FDWb4.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/BHsyMl1J.js" rel="modulepreload">
-		<link href="../../../_app/immutable/nodes/5.P8uq7Vgm.js" rel="modulepreload">
-		<link href="../../../_app/immutable/chunks/rLze1i4i.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/5.DyPbSIn8.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/OkQQb_S2.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/BMg7KjJ0.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/DR7RVcJr.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/BsPnvk72.js" rel="modulepreload">
@@ -29,11 +29,12 @@
     <div style="display: contents"><!--[--><!--[0--><!--[--><!--[--><div class="kb svelte-e2jw2j"><header><a class="crumb svelte-e2jw2j" href="/kb">support desk · kb</a> <h1 class="svelte-e2jw2j">#4471 split · three problems, not one</h1> <p class="meta svelte-e2jw2j"><span>owner <b>support desk</b></span> <span class="status proposed svelte-e2jw2j">proposed</span> <span class="svelte-e2jw2j">reviewed 2026-10-28 · 0 days ago</span></p></header> <!--[-1--><!--]--> <main><p><a href="/kb/incidents/4471">#4471</a> is marked known: one parser bug, one fix queued. The reports in it
 say otherwise. They hold three problems, and the queued parser fix closes only the first.</p> <aside class="warn svelte-17bri61"><!---->Shipping the parser fix will not end #4471. Booking-v3 form bookings and the one-day moves keep
 coming in until their own fixes ship.<!----></aside><!----> <h2>The problems</h2> <p class="sum svelte-1op6c6"><strong>412</strong> reports in #4471 · <strong>3</strong> problems ·
-  15 duplicate rows in the export, counted once</p> <table><thead><tr><th>problem</th><th>reports</th><th>what goes wrong</th><th>tenants</th><th>seen</th><th>ticket</th></tr></thead><tbody><!--[--><tr><td><code>parser</code></td><td>374</td><td>the shared parser reads the date month first</td><td>11</td><td>2026-04-01 → 2026-10-04</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/1">#1</a><!--]--></td></tr><tr><td><code>hint</code></td><td>33</td><td>booking-v3 prints MM/DD/YYYY, then reads the date day first</td><td>3</td><td>2026-04-17 → 2026-09-22</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/2">#2</a><!--]--></td></tr><tr><td><code>shift</code></td><td>5</td><td>the date moves one day earlier, by where the person is</td><td>5</td><td>2026-04-02 → 2026-10-04</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/3">#3</a><!--]--></td></tr><!--]--></tbody></table> <p class="note svelte-1op6c6">43 of 412 reports carry an intake tag that does not match their problem.</p><!----> <ul><li><strong>parser</strong> — the shared parser reads every date month first. Our tenants write the day
+  15 duplicate rows in the export, counted once</p> <table><thead><tr><th>problem</th><th>reports</th><th>what goes wrong</th><th>tenants</th><th>seen</th><th>ticket</th></tr></thead><tbody><!--[--><tr><td><code>parser</code></td><td>379</td><td>the shared parser reads the date month first</td><td>11</td><td>2026-04-01 → 2026-10-04</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/1">#1</a><!--]--></td></tr><tr><td><code>hint</code></td><td>33</td><td>booking-v3 prints MM/DD/YYYY, then reads the date day first</td><td>3</td><td>2026-04-17 → 2026-09-22</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/2">#2</a><!--]--></td></tr><tr><td><code>shift</code></td><td>5</td><td>the date moves one day earlier, by where the person is</td><td>5</td><td>2026-04-02 → 2026-10-04</td><td><!--[0--><a href="https://github.com/tueaii/mega-s01e03-support-kb/issues/3">#3</a><!--]--></td></tr><!--]--></tbody></table> <!--[--><p class="note svelte-1op6c6">5 <code>shift</code> reports are also counted under the cause their tenant files them under, as the desk counts them.</p><!--]--> <p class="note svelte-1op6c6">38 of 412 reports carry an intake tag that does not match where they are filed.</p><!----> <ul><li><strong>parser</strong> — the shared parser reads every date month first. Our tenants write the day
 first, so 7 April comes out as 4 July.</li> <li><strong>hint</strong> — the booking-v3 form prints <code>MM/DD/YYYY</code> under its date field and then reads the
 date day first. People do what the hint says, so their date flips. The parser fix does not
 touch this form.</li> <li><strong>shift</strong> — some dates did not flip. They moved one day earlier, and people in different
-places saw different days for the same meeting. That is a time zone bug.</li></ul> <h2>Why one ticket hid three</h2> <ul><li>We merged on subject line (<a href="/kb/decisions/0001-dedupe-by-subject">decision 0001</a>). All three
+places saw different days for the same meeting. That is a time zone bug. The desk files these
+reports under <code>parser</code> by tenant, so they count in both rows.</li></ul> <h2>Why one ticket hid three</h2> <ul><li>We merged on subject line (<a href="/kb/decisions/0001-dedupe-by-subject">decision 0001</a>). All three
 problems produce the same subjects (“Wrong day on the invite”, “Date is wrong”), so the
 subject cannot tell them apart.</li> <li>Intake tags come from the reporter’s browser, not the tenant. Many reports carry the wrong
 tag, so the tags cannot tell them apart either.</li> <li>The kb’s own table below found the hint bug and the one-day moves, then marked the first
@@ -42,15 +43,15 @@ channel), not on subject.</li></ol> <!--[0--><p class="stamp svelte-1280m42">des
 			
 			<script>
 				{
-					__sveltekit_a0mpwf = {
+					__sveltekit_1r180xc = {
 						base: new URL("../../..", location).pathname.slice(0, -1)
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../../../_app/immutable/entry/start.BEdyxXYZ.js"),
-						import("../../../_app/immutable/entry/app.D3bulSAR.js")
+						import("../../../_app/immutable/entry/start.0ZAixFZi.js"),
+						import("../../../_app/immutable/entry/app.Dd8qGPd_.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 5],
