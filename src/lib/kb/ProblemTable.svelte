@@ -1,52 +1,47 @@
 <script lang="ts">
   import reports from '#lib/data/reports-4471.json';
   import notes from '#lib/data/desk-notes.json';
-  import { uniqueById, type Report } from '#lib/kb/causes';
+  import { groupByCause, readAs, uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
-  import { groupByProblem, ISSUE_OF, ISSUE_REPO, WHAT } from '#lib/kb/problems';
+  import { ISSUE_REPO, TRACKED } from '#lib/kb/problems';
 
   let { ticket }: { ticket: number } = $props();
 
-  const rows = $derived((reports as Report[]).filter((r) => r.mergedInto === ticket));
-  const merged = $derived(uniqueById(rows));
-  const groups = $derived(groupByProblem(merged, tenantOf, notes.oneDayMove));
-  const misTagged = $derived(groups.reduce((n, g) => n + g.misTagged, 0));
+  const merged = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket));
+  const groups = $derived(groupByCause(merged, tenantOf));
 </script>
 
 <p class="sum">
   <strong>{merged.length}</strong> reports in #{ticket} ·
-  <strong>{groups.length}</strong> {groups.length === 1 ? 'problem' : 'problems'} ·
-  {rows.length - merged.length} duplicate rows in the export, counted once
+  <strong>{groups.length}</strong> {groups.length === 1 ? 'problem' : 'problems'}
 </p>
 
 <table>
   <thead>
-    <tr><th>problem</th><th>reports</th><th>what goes wrong</th><th>tenants</th><th>seen</th><th>ticket</th></tr>
+    <tr><th>problem</th><th>reports</th><th>what goes wrong</th><th>tenants</th><th>seen</th><th>ticket</th><th>outcome</th></tr>
   </thead>
   <tbody>
-    {#each groups as g (g.problem)}
+    {#each groups as g (g.cause)}
+      {@const t = g.cause === 'unplaced' ? undefined : TRACKED[g.cause]}
       <tr>
-        <td><code>{g.problem}</code></td>
+        <td><code>{g.cause}</code></td>
         <td>{g.reports.length}</td>
-        <td>{WHAT[g.problem]}</td>
+        <td>{t?.what ?? 'no tenant on file'}</td>
         <td>{g.tenants}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
-        <td>
-          {#if g.problem !== 'unplaced'}
-            <a href="{ISSUE_REPO}/issues/{ISSUE_OF[g.problem]}">#{ISSUE_OF[g.problem]}</a>
-          {:else}
-            none
-          {/if}
-        </td>
+        <td>{#if t}<a href="{ISSUE_REPO}/issues/{t.issue}">#{t.issue}</a>{:else}none{/if}</td>
+        <td>{#if t}<b>{t.outcome}</b> · {t.how}{/if}</td>
       </tr>
     {/each}
   </tbody>
 </table>
 
-{#each groups.filter((g) => g.problem === 'shift') as g (g.problem)}
-  <p class="note">{g.reports.length} <code>shift</code> reports are also counted under the cause their tenant files them under, as the desk counts them.</p>
+{#each groups as g (g.cause)}
+  {@const moved = readAs(g, notes.oneDayMove)}
+  {#if moved}
+    <p class="note">{moved} reports read as a one-day move; counted under <code>{g.cause}</code> by tenant.</p>
+  {/if}
 {/each}
-<p class="note">{misTagged} of {merged.length} reports carry an intake tag that does not match where they are filed.</p>
 
 <style>
   .sum { font-size: 1.1rem; }

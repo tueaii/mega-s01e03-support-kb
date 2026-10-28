@@ -1,59 +1,49 @@
 ---
 layout: runbook
-title: '#4471 split · three problems, not one'
+title: '#4471 split · two problems, not one'
 owner: support desk
-status: proposed
+status: closed
 reviewed: 2026-10-28
 signature: 'v1.eyJzdWIiOiI4MjI5IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMxNzg1OTAsImV4cCI6MTc5MzI2NDk5MH0.epfuQ7YboIW7adzWufKxMxzWW9nlE07aQcQL4P_Hf1Q'
 ---
 
 <script>
   import ProblemTable from '#lib/kb/ProblemTable.svelte';
-  import CauseTable from '#lib/kb/CauseTable.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
   import Callout from '#lib/kb/Callout.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one parser bug, one fix queued. The reports in it
-say otherwise. They hold three problems, and the queued parser fix closes only the first.
+[#4471](/kb/incidents/4471) was merged as one issue: the parser reads dates month first. The
+reports in it hold two problems. Each now has its own ticket, and both are closed.
 
-<Callout kind="warn">
-Shipping the parser fix will not end #4471. Booking-v3 form bookings and the one-day moves keep
-coming in until their own fixes ship.
+<Callout>
+Closed 5 October. The parser is fixed. The booking-v3 form is retired, so its hint will not be fixed.
 </Callout>
 
 ## The problems
 
 <ProblemTable ticket={4471} />
 
-- **parser** — the shared parser reads every date month first. Our tenants write the day
-  first, so 7 April comes out as 4 July.
-- **hint** — the booking-v3 form prints `MM/DD/YYYY` under its date field and then reads the
-  date day first. People do what the hint says, so their date flips. The parser fix does not
-  touch this form.
-- **shift** — some dates did not flip. They moved one day earlier, and people in different
-  places saw different days for the same meeting. That is a time zone bug. The desk files these
-  reports under `parser` by tenant, so they count in both rows.
+- **parser** — the shared parser read every date month first. Our tenants write the day first,
+  so 7 April came out as 4 July. Fixed in `fix(dates): parse dd/mm for eu locales`.
+- **hint** — the booking-v3 form printed `MM/DD/YYYY` under its date field and then read the
+  date day first. People did what the hint said, so their date flipped. The parser fix did not
+  touch this form. The form is retired, so this one closes as won't fix.
 
-## Why one ticket hid three
+## Why one ticket hid two
 
-- We merged on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)). All three
+- We merged on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)). Both
   problems produce the same subjects ("Wrong day on the invite", "Date is wrong"), so the
   subject cannot tell them apart.
-- Intake tags come from the reporter's browser, not the tenant. Many reports carry the wrong
-  tag, so the tags cannot tell them apart either.
-- The kb's own table below found the hint bug and the one-day moves, then marked the first
-  "no ticket of its own" and put the second in a footnote under `parser`.
+- Intake tags come from the reporter's browser, not the tenant, so they cannot tell them apart
+  either. The cause comes from the tenant: its locale and its booking form.
+- The kb's own cause table found the hint problem and marked it "no ticket of its own". Nobody
+  opened one.
 
-## What the kb showed before this page
+## What to do next time
 
-<CauseTable ticket={4471} />
-
-## What to do
-
-1. Keep #4471 for the parser fix only.
-2. Track the form hint and the one-day moves in their own tickets (linked in the table above).
-3. Write a new decision record to replace 0001: merge on cause (tenant locale, booking form,
+1. Before a big ticket is marked known, read its cause table. A second row is a second ticket.
+2. Write a new decision record to replace 0001: merge on cause (tenant locale, booking form,
    channel), not on subject.
 
 <RenderStamp {signature} />
