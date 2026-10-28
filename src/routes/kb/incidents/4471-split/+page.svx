@@ -1,0 +1,58 @@
+---
+layout: runbook
+title: '#4471 split · three problems, not one'
+owner: support desk
+status: proposed
+reviewed: 2026-10-28
+signature: 'Nattie (tueaii), with Claude'
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) is marked known: one parser bug, one fix queued. The reports in it
+say otherwise. They hold three problems, and the queued parser fix closes only the first.
+
+<Callout kind="warn">
+Shipping the parser fix will not end #4471. Booking-v3 form bookings and the one-day moves keep
+coming in until their own fixes ship.
+</Callout>
+
+## The problems
+
+<ProblemTable ticket={4471} />
+
+- **parser** — the shared parser reads every date month first. Our tenants write the day
+  first, so 7 April comes out as 4 July.
+- **hint** — the booking-v3 form prints `MM/DD/YYYY` under its date field and then reads the
+  date day first. People do what the hint says, so their date flips. The parser fix does not
+  touch this form.
+- **shift** — some dates did not flip. They moved one day earlier, and people in different
+  places saw different days for the same meeting. That is a time zone bug.
+
+## Why one ticket hid three
+
+- We merged on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)). All three
+  problems produce the same subjects ("Wrong day on the invite", "Date is wrong"), so the
+  subject cannot tell them apart.
+- Intake tags come from the reporter's browser, not the tenant. Many reports carry the wrong
+  tag, so the tags cannot tell them apart either.
+- The kb's own table below found the hint bug and the one-day moves, then marked the first
+  "no ticket of its own" and put the second in a footnote under `parser`.
+
+## What the kb showed before this page
+
+<CauseTable ticket={4471} />
+
+## What to do
+
+1. Keep #4471 for the parser fix only.
+2. Track the form hint and the one-day moves in their own tickets (linked in the table above).
+3. Write a new decision record to replace 0001: merge on cause (tenant locale, booking form,
+   channel), not on subject.
+
+<RenderStamp {signature} />
